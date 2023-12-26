@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 import requests as re
 
 from notifier import create_message, send_message
+import time
+
 
 def get_current_prices(search_query):
     # Get HTML of page 'https://www.estantevirtual.com.br/busca?q=<search_query>'
@@ -53,6 +55,8 @@ if __name__ == "__main__":
         if lowest_price_until_now is None or current_lowest_price < lowest_price_until_now:
             print(f"New lowest price for {book['name']}: {current_lowest_price}")
             to_notify.append(book)
+
+        time.sleep(5)  # Sleep for 5 seconds to avoid getting blocked by the website
 
     # Save JSON in "data/database.json"
     with open("data/database.json", "w") as f:
