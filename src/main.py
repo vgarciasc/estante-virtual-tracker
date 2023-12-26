@@ -8,21 +8,18 @@ import time
 
 
 def get_current_prices(search_query):
-    # Get HTML of page 'https://www.estantevirtual.com.br/busca?q=<search_query>'
-
-    # Make a request to 'https://www.estantevirtual.com.br/busca?q=<search_query>'
     response = re.get(f"https://www.estantevirtual.com.br/busca?q={search_query}")
-
-    # Get HTML of page
     html = response.text
 
-    # Parse HTML to get the prices of the books, which are contained in spans with class 'preco'
     soup = BeautifulSoup(html, "html.parser")
+
+    if soup.find("div", class_="header-pagina-sem-resultado") is not None:
+        return []
+
     prices = soup.find_all("span", class_="preco")
     prices = [float(p.text.replace("R$ ", "").replace(",", ".")) for p in prices]
     prices.sort()
 
-    # Return a list of prices
     return prices
 
 
@@ -31,7 +28,6 @@ def get_lowest_price(price_list):
 
 
 if __name__ == "__main__":
-    # Load JSON in "data/database.json"
     with open("data/database.json", "r") as f:
         data = json.load(f)
 
