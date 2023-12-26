@@ -66,7 +66,7 @@ class BookEditorApp:
         self.update_prices_button = tk.Button(self.detail_frame, text="Update Prices", command=self.update_prices)
         self.update_prices_button.grid(row=6, column=0, columnspan=2, sticky=tk.W+tk.E, pady=10)
 
-        self.save_changes_button = tk.Button(self.detail_frame, text="Save Changes", command=self.save_changes)
+        self.save_changes_button = tk.Button(self.detail_frame, text="Save Changes", command=self.save_to_file)
         self.save_changes_button.grid(row=7, column=0, columnspan=2, sticky=tk.W+tk.E)
 
         # Bind selection event to update details
@@ -87,17 +87,6 @@ class BookEditorApp:
 
     def clear_listbox(self):
         self.book_listbox.delete(0, tk.END)
-
-    def update_json_data(self, field, value):
-        # Get selected book index
-        print(f"In updated_json_data, selected_idx = {self.selected_idx}")
-        if self.selected_idx == -1:
-            return
-
-        # Update json_data with the new value
-        selected_book = self.data["books"][self.selected_idx]
-        selected_book[field] = value
-        print(f"Updated {field} to {value}.")
 
     def update_details(self, event):
         # Get selected book index
@@ -128,8 +117,24 @@ class BookEditorApp:
 
         self.active_var.set(selected_book["active"])
 
-    def update_prices(self):
+    def update_json(self):
+        self.update_json_field("name", self.name_entry.get())
+        self.update_json_field("author", self.author_entry.get())
+        self.update_json_field("search_query", self.search_query_entry.get())
+        self.update_json_field("active", self.active_var.get())
+
+    def update_json_field(self, field, value):
         # Get selected book index
+        print(f"In updated_json_data, selected_idx = {self.selected_idx}")
+        if self.selected_idx == -1:
+            return
+
+        # Update json_data with the new value
+        selected_book = self.data["books"][self.selected_idx]
+        selected_book[field] = value
+        print(f"Updated {field} to {value}.")
+
+    def update_prices(self):
         if self.selected_idx == -1:
             return
 
@@ -146,11 +151,14 @@ class BookEditorApp:
             price_display_str += ", ..."
         self.price_display["text"] = price_display_str
 
+        self.last_updated_display["text"] = selected_book['date_updated']
+
         # Display success message
         messagebox.showinfo("Success", f"Prices updated successfully for \"{selected_book['name']}\".")
 
-    def add_entry(self):
-        # Add a new entry with default values
+        self.save_to_file(popup_verbose=False)
+
+    def add_entry(self, popup_verbose=True):
         new_entry = {
             "name": "New Book",
             "author": "New Author",
@@ -172,13 +180,11 @@ class BookEditorApp:
         self.update_details(None)
 
         # Display success message
-        messagebox.showinfo("Success", "New entry added successfully.")
+        if popup_verbose:
+            messagebox.showinfo("Success", "New entry added successfully.")
 
-    def save_changes(self):
-        self.update_json_data("name", self.name_entry.get())
-        self.update_json_data("author", self.author_entry.get())
-        self.update_json_data("search_query", self.search_query_entry.get())
-        self.update_json_data("active", self.active_var.get())
+    def save_to_file(self, popup_verbose=True):
+        self.update_json()
 
         with open("data/database.json", "w") as f:
             json.dump(self.data, f, indent=4)
@@ -189,7 +195,8 @@ class BookEditorApp:
         self.book_listbox.selection_set(self.selected_idx)
 
         # Display success message
-        messagebox.showinfo("Success", f"Changes saved successfully to \"{self.name_entry.get()}\".")
+        if popup_verbose:
+            messagebox.showinfo("Success", f"Changes saved successfully to \"{self.name_entry.get()}\".")
 
 if __name__ == "__main__":
     root = tk.Tk()
