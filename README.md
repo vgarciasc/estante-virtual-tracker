@@ -1,6 +1,9 @@
 # Estante Virtual Tracker
 > A tracker for book prices on the brazilian second-hand virtual store, Estante Virtual 
 
+![](https://img.shields.io/badge/Python-3.11.1-blue?style=flat-square&logo=python&logoColor=white)
+![](https://img.shields.io/badge/Telegram%20Bot-API-blue?style=flat-square&logo=telegram&logoColor=white)
+
 ## How do I use this?
 
 First of all, clone the repository on your computer. Then, install the dependencies:
@@ -26,3 +29,5 @@ Please don't run it every 5 minutes. Be polite. I'm running it every day and it 
 
 Yeah, I've made this exact project like 2 times before (using Gmail instead of Telegram Bots), but this time I wanted to use it as a benchmark so I could gauge how ChatGPT 3.5 would fare on the task.
 The result: 2 hours (1 hour for me to figure out the Telegram bot part, and 1 hour for the rest). Scary! But useful. If it allows me to spend less time writing Tkinter screens, I'm not going to complain!
+
+![](multimedia/screenshot.png)
