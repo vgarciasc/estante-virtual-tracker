@@ -90,19 +90,21 @@ class BookEditorApp:
 
     def update_json_data(self, field, value):
         # Get selected book index
-        selected_index = self.book_listbox.curselection()
-        if not selected_index:
+        print(f"In updated_json_data, selected_idx = {self.selected_idx}")
+        if self.selected_idx == -1:
             return
 
         # Update json_data with the new value
-        selected_book = self.data["books"][selected_index[0]]
+        selected_book = self.data["books"][self.selected_idx]
         selected_book[field] = value
+        print(f"Updated {field} to {value}.")
 
     def update_details(self, event):
         # Get selected book index
         selected_index = self.book_listbox.curselection()
         if not selected_index:
             return
+        self.selected_idx = selected_index[0]
 
         # Get selected book data
         selected_book = self.data["books"][selected_index[0]]
@@ -128,12 +130,11 @@ class BookEditorApp:
 
     def update_prices(self):
         # Get selected book index
-        selected_index = self.book_listbox.curselection()
-        if not selected_index:
+        if self.selected_idx == -1:
             return
 
         # Get selected book data
-        selected_book = self.data["books"][selected_index[0]]
+        selected_book = self.data["books"][self.selected_idx]
 
         # Update prices
         selected_book["prices"] = get_current_prices(selected_book["search_query"])
@@ -153,7 +154,7 @@ class BookEditorApp:
         new_entry = {
             "name": "New Book",
             "author": "New Author",
-            "active": False,
+            "active": True,
             "search_query": "new+book",
             "date_added": datetime.datetime.now().strftime("%Y-%m-%d"),
             "date_updated": "",
@@ -167,6 +168,7 @@ class BookEditorApp:
         # Select the new entry
         self.book_listbox.selection_clear(0, tk.END)
         self.book_listbox.selection_set(tk.END)
+        self.selected_idx = len(self.data["books"]) - 1
         self.update_details(None)
 
         # Display success message
@@ -180,6 +182,11 @@ class BookEditorApp:
 
         with open("data/database.json", "w") as f:
             json.dump(self.data, f, indent=4)
+
+        self.clear_listbox()
+        self.populate_listbox()
+        self.book_listbox.selection_clear(0, tk.END)
+        self.book_listbox.selection_set(self.selected_idx)
 
         # Display success message
         messagebox.showinfo("Success", f"Changes saved successfully to \"{self.name_entry.get()}\".")
