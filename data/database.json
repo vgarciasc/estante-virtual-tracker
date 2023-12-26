@@ -1,0 +1,35 @@
+{
+    "books": [
+        {
+            "name": "The Unfolding of Language",
+            "author": "Guy Deutscher",
+            "active": true,
+            "search_query": "unfolding+of+language",
+            "date_added": "2015-01-01",
+            "date_updated": "2023-12-26",
+            "prices": [
+                150.0
+            ]
+        },
+        {
+            "name": "Exhalation: Stories",
+            "author": "Ted Chiang",
+            "active": true,
+            "search_query": "exhalation+stories",
+            "date_added": "2015-01-01",
+            "date_updated": "2023-12-26",
+            "prices": [
+                99.9
+            ]
+        },
+        {
+            "name": "O Silmarillion",
+            "author": "J. R. R. Tolkien",
+            "active": false,
+            "search_query": "silmarillion",
+            "date_added": "2015-01-01",
+            "date_updated": "2023-12-26",
+            "prices": []
+        }
+    ]
+}
